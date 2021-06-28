@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    web:
+        container_name: webserver_microfrontend
+        image: nginx
+        volumes:
+            - ./nginx/app.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - front
+        ports:
+            - 80:80
+            # - 443:443
+    container:
+        container_name: front_container
+        # image: robertolimadev/react:12-alpine
+        build:
+            context: ./container
+            dockerfile: Dockerfile
+        volumes:
+            - ./container:/app
+        # depends_on:
+        # - api
+    register:
+        container_name: front_register
+        # image: robertolimadev/react:12-alpine
+        build:
+            context: ./register
+            dockerfile: Dockerfile
+        volumes:
+            - ./register:/app
+        depends_on:
+            - front_container
